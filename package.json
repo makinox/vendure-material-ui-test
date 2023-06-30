@@ -19,13 +19,15 @@
     "react-scripts": "5.0.1",
     "styled-components": "6.0.1",
     "typescript": "5.1.6",
-    "web-vitals": "3.3.2"
+    "web-vitals": "3.3.2",
+    "@craco/craco": "7.1.0",
+    "craco-alias": "3.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "craco eject"
   },
   "eslintConfig": {
     "extends": [
@@ -46,6 +48,7 @@
     ]
   },
   "devDependencies": {
-    "@types/styled-components": "5.1.26"
+    "@types/styled-components": "5.1.26",
+    "@babel/plugin-proposal-private-property-in-object": "7.21.11"
   }
 }
