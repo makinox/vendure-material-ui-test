@@ -8,7 +8,7 @@ const GET_PRODUCTS = graphql(/* GraphQL */ `
         name
         variants {
           price
-          stockLevel
+          currencyCode
         }
         assets {
           preview

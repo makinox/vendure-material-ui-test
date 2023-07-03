@@ -2,7 +2,7 @@ import { appBreakpoints, getBreakpoint } from '@/utils';
 import { styled } from 'styled-components';
 
 export const ProductListStyled = styled.section`
-  gap: 10px;
+  gap: 40px;
   display: grid;
   grid-template-columns: repeat(1, minmax(0, 1fr));
 
@@ -16,6 +16,9 @@ export const ProductListStyled = styled.section`
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
   ${getBreakpoint(appBreakpoints.xl)} {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  ${getBreakpoint(appBreakpoints.xxl)} {
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 `;

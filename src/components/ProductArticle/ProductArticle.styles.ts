@@ -9,8 +9,14 @@ export const ProductArticleStyled = styled.article`
 
   & img {
     width: 100%;
-    max-height: 200px;
+    height: 160px;
     object-fit: cover;
     border-radius: 10px;
+  }
+
+  .pricing-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 `;

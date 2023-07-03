@@ -1,7 +1,9 @@
 import { useMemo } from 'react';
 
 import { GetProductsQuery } from '@/graphql/gql/graphql';
-import { DEFAULT_IMAGE } from '@/constants';
+import { APP_PRICE_VARIANT, DEFAULT_IMAGE } from '@/constants';
+import { formatPrice } from '@/utils';
+
 import { ProductArticleStyled } from './ProductArticle.styles';
 
 interface ProductArticleProps {
@@ -15,6 +17,13 @@ export function ProductArticle({ product }: ProductArticleProps) {
     return imagePreview;
   }, [product.assets]);
 
+  const price = useMemo(() => {
+    const priceVariant = product?.variants[APP_PRICE_VARIANT];
+    const pricePreview = priceVariant?.price;
+    if (!pricePreview) return formatPrice(0, priceVariant.currencyCode);
+    return formatPrice(pricePreview, priceVariant.currencyCode);
+  }, [product.variants]);
+
   return (
     <ProductArticleStyled>
       <div>
@@ -22,7 +31,10 @@ export function ProductArticle({ product }: ProductArticleProps) {
       </div>
       <div>
         <h3>{product.name}</h3>
-        <span>{product.variants[0].price}</span>
+        <div className="pricing-section">
+          <span>{price}</span>
+          <button>BUY</button>
+        </div>
       </div>
     </ProductArticleStyled>
   );
