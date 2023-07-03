@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "3.7.16",
+    "@craco/craco": "7.1.0",
     "@mui/material": "5.13.6",
     "@mui/styled-engine-sc": "5.12.0",
     "@testing-library/jest-dom": "5.16.5",
@@ -13,21 +14,21 @@
     "@types/node": "20.3.2",
     "@types/react": "18.2.14",
     "@types/react-dom": "18.2.6",
+    "craco-alias": "3.0.1",
     "graphql": "16.7.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-scripts": "5.0.1",
     "styled-components": "6.0.1",
     "typescript": "5.1.6",
-    "web-vitals": "3.3.2",
-    "@craco/craco": "7.1.0",
-    "craco-alias": "3.0.1"
+    "web-vitals": "3.3.2"
   },
   "scripts": {
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "eject": "craco eject"
+    "eject": "craco eject",
+    "codegen": "yarn graphql-codegen"
   },
   "eslintConfig": {
     "extends": [
@@ -48,7 +49,10 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "7.21.11",
+    "@graphql-codegen/cli": "4.0.1",
+    "@graphql-codegen/client-preset": "4.0.1",
     "@types/styled-components": "5.1.26",
-    "@babel/plugin-proposal-private-property-in-object": "7.21.11"
+    "ts-node": "10.9.1"
   }
 }
