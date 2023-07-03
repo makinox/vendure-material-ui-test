@@ -1,6 +1,9 @@
 import { useQuery } from '@apollo/client';
 
 import { GET_PRODUCTS } from '@/graphql/queries';
+import { ProductArticle } from '@/components';
+
+import { ProductListStyled } from './ProductList.styles';
 
 export function ProductList() {
   const { data, loading, error, refetch } = useQuery(GET_PRODUCTS);
@@ -22,23 +25,10 @@ export function ProductList() {
     );
 
   return (
-    <section>
-      {data?.products.items.map((product) => {
-        return (
-          <article>
-            <div>
-              <img
-                src={product.assets[0]?.preview}
-                alt={`Santex ${product.name}`}
-              />
-            </div>
-            <div>
-              <h3>{product.name}</h3>
-              <span>{product.variants[0].price}</span>
-            </div>
-          </article>
-        );
-      })}
-    </section>
+    <ProductListStyled>
+      {data?.products.items.map((product) => (
+        <ProductArticle key={product.id} product={product} />
+      ))}
+    </ProductListStyled>
   );
 }

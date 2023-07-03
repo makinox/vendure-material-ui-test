@@ -1,3 +1,5 @@
+import { SCREEN_MEDIA_QUERY } from '@/constants';
+
 export enum breakpointValues {
   sm = '640px',
   md = '768px',
@@ -13,8 +15,6 @@ export enum appBreakpoints {
   xl,
   xxl,
 }
-
-const SCREEN_MEDIA_QUERY = '@media only screen and (min-width: XXXXX)';
 
 export function getBreakpoint(breakpoint: appBreakpoints) {
   switch (breakpoint) {
