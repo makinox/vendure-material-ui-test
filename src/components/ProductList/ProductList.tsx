@@ -1,6 +1,8 @@
 import { useQuery } from '@apollo/client';
 
+import { Box, Button, CircularProgress, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
+
 import { GET_PRODUCTS } from '@/graphql/queries';
 import { ProductArticle } from '@/components';
 
@@ -9,24 +11,31 @@ export function ProductList() {
 
   if (error)
     return (
-      <section>
-        <h2>Error loading th products</h2>
-        <button onClick={() => refetch()}>Try again</button>
-      </section>
+      <Box
+        justifyContent="center"
+        alignItems="center"
+        flexDirection="column"
+        sx={{ display: 'flex', marginTop: '15rem' }}
+      >
+        <Typography variant="h3">Error loading the products</Typography>
+        <Button variant="contained" color="error" onClick={() => refetch()}>
+          Try again
+        </Button>
+      </Box>
     );
 
   if (loading)
     return (
-      <section>
-        <h2>Loading ...</h2>
-      </section>
+      <Box justifyContent="center" sx={{ display: 'flex', marginTop: '15rem' }}>
+        <CircularProgress color="error" />
+      </Box>
     );
 
   return (
     <Grid
       container
       spacing={2}
-      sx={{ marginTop: '50px' }}
+      sx={{ marginTop: '4rem' }}
       justifyContent="center"
     >
       {data?.products.items.map((product) => (

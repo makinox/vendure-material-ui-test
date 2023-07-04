@@ -32,6 +32,9 @@ interface ProductArticleProps {
   product: GetProductsQuery['products']['items'][0];
 }
 
+/**
+ * App article, shows the product information and actions to buy the product
+ */
 export function ProductArticle({ product }: ProductArticleProps) {
   const { saveOrder } = useOrder();
   const [addItem, { loading, error }] = useMutation(ADD_ITEM_TO_ORDER);
