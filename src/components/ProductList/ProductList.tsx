@@ -1,46 +1,70 @@
+import { useMemo, useState } from 'react';
 import { useQuery } from '@apollo/client';
 
-import { Box, Button, CircularProgress, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
+import { Box, Button } from '@mui/material';
 
+import { ErrorLayout, LoadingLayout, ProductArticle } from '@/components';
 import { GET_PRODUCTS } from '@/graphql/queries';
-import { ProductArticle } from '@/components';
+import { PAGINATION_FACTOR } from '@/constants';
 
 export function ProductList() {
-  const { data, loading, error, refetch } = useQuery(GET_PRODUCTS);
+  const [skipIndex, setSkipIndex] = useState(0);
+  const { data, loading, error, refetch } = useQuery(GET_PRODUCTS, {
+    variables: { skip: skipIndex, take: PAGINATION_FACTOR },
+  });
 
-  if (error)
-    return (
+  const showLeftButton = useMemo(() => {
+    const futureValue = skipIndex - PAGINATION_FACTOR;
+    return futureValue >= 0;
+  }, [skipIndex]);
+
+  const showRightButton = useMemo(() => {
+    const futureValue = skipIndex + PAGINATION_FACTOR;
+    const totalItems = data?.products?.totalItems || 0;
+    return futureValue < totalItems;
+  }, [data?.products.totalItems, skipIndex]);
+
+  if (error) return <ErrorLayout callback={() => refetch()} />;
+
+  if (loading) return <LoadingLayout />;
+
+  return (
+    <>
+      <Grid
+        container
+        spacing={2}
+        sx={{ marginTop: '4rem' }}
+        justifyContent="center"
+      >
+        {data?.products.items.map((product) => (
+          <ProductArticle key={product.id} product={product} />
+        ))}
+      </Grid>
       <Box
         justifyContent="center"
         alignItems="center"
-        flexDirection="column"
-        sx={{ display: 'flex', marginTop: '15rem' }}
+        sx={{ display: 'flex', marginTop: '2rem', gap: '2rem' }}
       >
-        <Typography variant="h3">Error loading the products</Typography>
-        <Button variant="contained" color="error" onClick={() => refetch()}>
-          Try again
-        </Button>
+        {showLeftButton && (
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() => setSkipIndex((prev) => prev - PAGINATION_FACTOR)}
+          >
+            ←
+          </Button>
+        )}
+        {showRightButton && (
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() => setSkipIndex((prev) => prev + PAGINATION_FACTOR)}
+          >
+            →
+          </Button>
+        )}
       </Box>
-    );
-
-  if (loading)
-    return (
-      <Box justifyContent="center" sx={{ display: 'flex', marginTop: '15rem' }}>
-        <CircularProgress color="error" />
-      </Box>
-    );
-
-  return (
-    <Grid
-      container
-      spacing={2}
-      sx={{ marginTop: '4rem' }}
-      justifyContent="center"
-    >
-      {data?.products.items.map((product) => (
-        <ProductArticle key={product.id} product={product} />
-      ))}
-    </Grid>
+    </>
   );
 }

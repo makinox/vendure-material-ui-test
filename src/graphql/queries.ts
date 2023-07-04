@@ -1,8 +1,8 @@
 import { graphql } from './gql/gql';
 
 const GET_PRODUCTS = graphql(`
-  query GetProducts {
-    products {
+  query GetProducts($skip: Int, $take: Int) {
+    products(options: { skip: $skip, take: $take }) {
       items {
         id
         name
