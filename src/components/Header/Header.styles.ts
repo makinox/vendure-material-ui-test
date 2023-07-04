@@ -9,7 +9,7 @@ export const HeaderStyles = styled(Stack)`
     background-color: red;
     padding: 10px;
     height: auto;
-    max-height: 30px;
+    max-height: 20px;
     border-radius: 10px;
   }
 `;

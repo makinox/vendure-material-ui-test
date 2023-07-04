@@ -1,9 +1,8 @@
 import { useQuery } from '@apollo/client';
 
+import Grid from '@mui/material/Unstable_Grid2';
 import { GET_PRODUCTS } from '@/graphql/queries';
 import { ProductArticle } from '@/components';
-
-import { ProductListStyled } from './ProductList.styles';
 
 export function ProductList() {
   const { data, loading, error, refetch } = useQuery(GET_PRODUCTS);
@@ -24,10 +23,15 @@ export function ProductList() {
     );
 
   return (
-    <ProductListStyled sx={{ marginTop: '50px' }}>
+    <Grid
+      container
+      spacing={2}
+      sx={{ marginTop: '50px' }}
+      justifyContent="center"
+    >
       {data?.products.items.map((product) => (
         <ProductArticle key={product.id} product={product} />
       ))}
-    </ProductListStyled>
+    </Grid>
   );
 }

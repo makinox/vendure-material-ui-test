@@ -1,4 +1,6 @@
 import { useMemo } from 'react';
+import Grid from '@mui/material/Unstable_Grid2';
+
 import {
   CardMedia,
   Button,
@@ -31,24 +33,26 @@ export function ProductArticle({ product }: ProductArticleProps) {
   }, [product.variants]);
 
   return (
-    <Card>
-      <CardMedia
-        component="img"
-        alt={`Santex ${product.name}`}
-        height="160"
-        image={image}
-      />
-      <CardContent>
-        <Typography variant="h6">{product.name}</Typography>
-        <Typography variant="body2" color="text.secondary">
-          {price}
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small" color="error">
-          Buy
-        </Button>
-      </CardActions>
-    </Card>
+    <Grid xs={12} sm={5} md={4} xl={3}>
+      <Card>
+        <CardMedia
+          component="img"
+          alt={`Santex ${product.name}`}
+          height="160"
+          image={image}
+        />
+        <CardContent>
+          <Typography variant="h6">{product.name}</Typography>
+          <Typography variant="body2" color="text.secondary">
+            {price}
+          </Typography>
+        </CardContent>
+        <CardActions>
+          <Button size="small" color="error">
+            Buy
+          </Button>
+        </CardActions>
+      </Card>
+    </Grid>
   );
 }
