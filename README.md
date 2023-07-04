@@ -4,6 +4,12 @@ Quick challenge to help candidates to join RBI Team to catch up with currently u
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Results
+
+App available [here](https://64a45033f689af007bedfc33--flourishing-mermaid-2850c7.netlify.app/)
+
+![Image of the app](./preview.png)
+
 ## Goals
 
 - Get familiar with Styled Components as styling strategy
