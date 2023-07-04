@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import Grid from '@mui/material/Unstable_Grid2';
 
@@ -10,11 +10,15 @@ import {
   Typography,
   CardActions,
   CircularProgress,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
 } from '@mui/material';
 
 import { GetProductsQuery } from '@/graphql/gql/graphql';
 import { ADD_ITEM_TO_ORDER } from '@/graphql/mutations';
 import { formatPrice, generateRandomId } from '@/utils';
+import { useOrder } from '@/contexts/order';
 
 import {
   APP_DEFAULT_QUANTITY,
@@ -23,7 +27,6 @@ import {
 } from '@/constants';
 
 import { CardDescription } from './ProductArticle.styles';
-import { useOrder } from '@/contexts/order';
 
 interface ProductArticleProps {
   product: GetProductsQuery['products']['items'][0];
@@ -32,6 +35,7 @@ interface ProductArticleProps {
 export function ProductArticle({ product }: ProductArticleProps) {
   const { saveOrder } = useOrder();
   const [addItem, { loading, error }] = useMutation(ADD_ITEM_TO_ORDER);
+  const [priceVariantIndex, setPricevariantIndex] = useState(APP_PRICE_VARIANT);
 
   const image = useMemo(() => {
     const imagePreview = product.assets[0]?.preview;
@@ -40,11 +44,11 @@ export function ProductArticle({ product }: ProductArticleProps) {
   }, [product.assets]);
 
   const price = useMemo(() => {
-    const priceVariant = product?.variants[APP_PRICE_VARIANT];
+    const priceVariant = product?.variants[priceVariantIndex];
     const pricePreview = priceVariant?.priceWithTax;
     if (!pricePreview) return formatPrice(0);
     return formatPrice(pricePreview);
-  }, [product.variants]);
+  }, [priceVariantIndex, product?.variants]);
 
   const renderButton = useMemo(() => {
     if (error)
@@ -68,15 +72,15 @@ export function ProductArticle({ product }: ProductArticleProps) {
 
     return (
       <Button size="small" color="error" onClick={handleClick}>
-        Buy
+        Buy {price}
       </Button>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [error, loading]);
+  }, [error, loading, price]);
 
   function handleClick() {
-    const productVariantId = product?.variants[APP_PRICE_VARIANT].id;
-    const priceWithTax = product?.variants[APP_PRICE_VARIANT].priceWithTax;
+    const productVariantId = product?.variants[priceVariantIndex].id;
+    const priceWithTax = product?.variants[priceVariantIndex].priceWithTax;
 
     addItem({
       variables: { productVariantId, quantity: APP_DEFAULT_QUANTITY },
@@ -94,6 +98,10 @@ export function ProductArticle({ product }: ProductArticleProps) {
       .catch((catchError) => console.log({ catchError }));
   }
 
+  function handleChange(event: SelectChangeEvent) {
+    setPricevariantIndex(parseInt(event?.target?.value, 10));
+  }
+
   return (
     <Grid xs={12} sm={5} md={4} xl={3}>
       <Card>
@@ -108,9 +116,19 @@ export function ProductArticle({ product }: ProductArticleProps) {
           <CardDescription variant="subtitle2">
             {product.description}
           </CardDescription>
-          <Typography variant="body2" color="text.secondary">
-            {price}
-          </Typography>
+
+          <Select
+            value={priceVariantIndex.toString()}
+            onChange={handleChange}
+            size="small"
+            sx={{ width: '100%', textOverflow: 'ellipsis' }}
+          >
+            {product.variants.map((variant, index) => (
+              <MenuItem value={index} key={variant.id}>
+                {variant.name} - {formatPrice(variant.priceWithTax)}
+              </MenuItem>
+            ))}
+          </Select>
         </CardContent>
         <CardActions>{renderButton}</CardActions>
       </Card>

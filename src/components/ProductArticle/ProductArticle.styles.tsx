@@ -6,5 +6,5 @@ export const CardDescription = styled(Typography)`
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
   overflow: hidden;
-  margin: 5px 0 5px 0;
+  margin: 10px 0 10px 0;
 `;
