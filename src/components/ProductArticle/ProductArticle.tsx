@@ -1,10 +1,16 @@
 import { useMemo } from 'react';
+import {
+  CardMedia,
+  Button,
+  Card,
+  CardContent,
+  Typography,
+  CardActions,
+} from '@mui/material';
 
-import { GetProductsQuery } from '@/graphql/gql/graphql';
 import { APP_PRICE_VARIANT, DEFAULT_IMAGE } from '@/constants';
+import { GetProductsQuery } from '@/graphql/gql/graphql';
 import { formatPrice } from '@/utils';
-
-import { ProductArticleStyled } from './ProductArticle.styles';
 
 interface ProductArticleProps {
   product: GetProductsQuery['products']['items'][0];
@@ -25,17 +31,24 @@ export function ProductArticle({ product }: ProductArticleProps) {
   }, [product.variants]);
 
   return (
-    <ProductArticleStyled>
-      <div>
-        <img src={image} alt={`Santex ${product.name}`} />
-      </div>
-      <div>
-        <h3>{product.name}</h3>
-        <div className="pricing-section">
-          <span>{price}</span>
-          <button>BUY</button>
-        </div>
-      </div>
-    </ProductArticleStyled>
+    <Card>
+      <CardMedia
+        component="img"
+        alt={`Santex ${product.name}`}
+        height="160"
+        image={image}
+      />
+      <CardContent>
+        <Typography variant="h6">{product.name}</Typography>
+        <Typography variant="body2" color="text.secondary">
+          {price}
+        </Typography>
+      </CardContent>
+      <CardActions>
+        <Button size="small" color="error">
+          Buy
+        </Button>
+      </CardActions>
+    </Card>
   );
 }

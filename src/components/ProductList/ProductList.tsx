@@ -7,7 +7,6 @@ import { ProductListStyled } from './ProductList.styles';
 
 export function ProductList() {
   const { data, loading, error, refetch } = useQuery(GET_PRODUCTS);
-  console.log({ data });
 
   if (error)
     return (
@@ -25,7 +24,7 @@ export function ProductList() {
     );
 
   return (
-    <ProductListStyled>
+    <ProductListStyled sx={{ marginTop: '50px' }}>
       {data?.products.items.map((product) => (
         <ProductArticle key={product.id} product={product} />
       ))}
