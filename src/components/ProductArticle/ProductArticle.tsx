@@ -14,7 +14,7 @@ import {
 
 import { GetProductsQuery } from '@/graphql/gql/graphql';
 import { ADD_ITEM_TO_ORDER } from '@/graphql/mutations';
-import { formatPrice } from '@/utils';
+import { formatPrice, generateRandomId } from '@/utils';
 
 import {
   APP_DEFAULT_QUANTITY,
@@ -23,12 +23,14 @@ import {
 } from '@/constants';
 
 import { CardDescription } from './ProductArticle.styles';
+import { useOrder } from '@/contexts/order';
 
 interface ProductArticleProps {
   product: GetProductsQuery['products']['items'][0];
 }
 
 export function ProductArticle({ product }: ProductArticleProps) {
+  const { saveOrder } = useOrder();
   const [addItem, { loading, error }] = useMutation(ADD_ITEM_TO_ORDER);
 
   const image = useMemo(() => {
@@ -39,9 +41,9 @@ export function ProductArticle({ product }: ProductArticleProps) {
 
   const price = useMemo(() => {
     const priceVariant = product?.variants[APP_PRICE_VARIANT];
-    const pricePreview = priceVariant?.price;
-    if (!pricePreview) return formatPrice(0, priceVariant.currencyCode);
-    return formatPrice(pricePreview, priceVariant.currencyCode);
+    const pricePreview = priceVariant?.priceWithTax;
+    if (!pricePreview) return formatPrice(0);
+    return formatPrice(pricePreview);
   }, [product.variants]);
 
   const renderButton = useMemo(() => {
@@ -74,15 +76,22 @@ export function ProductArticle({ product }: ProductArticleProps) {
 
   function handleClick() {
     const productVariantId = product?.variants[APP_PRICE_VARIANT].id;
+    const priceWithTax = product?.variants[APP_PRICE_VARIANT].priceWithTax;
+
     addItem({
       variables: { productVariantId, quantity: APP_DEFAULT_QUANTITY },
     })
-      .then((data) => {
-        console.log({ data });
+      .then((result) => {
+        const mutationResult = result.data?.addItemToOrder;
+        const mutationIsValid = 'id' in mutationResult!;
+        if (!mutationIsValid) return;
+
+        saveOrder({
+          id: generateRandomId(10),
+          subTotal: priceWithTax,
+        });
       })
-      .catch((catchError) => {
-        console.log({ catchError });
-      });
+      .catch((catchError) => console.log({ catchError }));
   }
 
   return (

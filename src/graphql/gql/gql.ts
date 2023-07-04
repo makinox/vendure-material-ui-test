@@ -14,7 +14,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "\n  mutation AddItemToOrder($productVariantId: ID!, $quantity: Int!) {\n    addItemToOrder(productVariantId: $productVariantId, quantity: $quantity) {\n      ... on Order {\n        id\n        subTotalWithTax\n      }\n    }\n  }\n": types.AddItemToOrderDocument,
-    "\n  query GetProducts {\n    products {\n      items {\n        id\n        name\n        description\n        variants {\n          id\n          price\n          name\n          currencyCode\n        }\n        assets {\n          preview\n        }\n      }\n      totalItems\n    }\n  }\n": types.GetProductsDocument,
+    "\n  query GetProducts {\n    products {\n      items {\n        id\n        name\n        description\n        variants {\n          id\n          priceWithTax\n          name\n        }\n        assets {\n          preview\n        }\n      }\n      totalItems\n    }\n  }\n": types.GetProductsDocument,
 };
 
 /**
@@ -38,7 +38,7 @@ export function graphql(source: "\n  mutation AddItemToOrder($productVariantId: 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query GetProducts {\n    products {\n      items {\n        id\n        name\n        description\n        variants {\n          id\n          price\n          name\n          currencyCode\n        }\n        assets {\n          preview\n        }\n      }\n      totalItems\n    }\n  }\n"): (typeof documents)["\n  query GetProducts {\n    products {\n      items {\n        id\n        name\n        description\n        variants {\n          id\n          price\n          name\n          currencyCode\n        }\n        assets {\n          preview\n        }\n      }\n      totalItems\n    }\n  }\n"];
+export function graphql(source: "\n  query GetProducts {\n    products {\n      items {\n        id\n        name\n        description\n        variants {\n          id\n          priceWithTax\n          name\n        }\n        assets {\n          preview\n        }\n      }\n      totalItems\n    }\n  }\n"): (typeof documents)["\n  query GetProducts {\n    products {\n      items {\n        id\n        name\n        description\n        variants {\n          id\n          priceWithTax\n          name\n        }\n        assets {\n          preview\n        }\n      }\n      totalItems\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

@@ -9,9 +9,8 @@ const GET_PRODUCTS = graphql(`
         description
         variants {
           id
-          price
+          priceWithTax
           name
-          currencyCode
         }
         assets {
           preview
