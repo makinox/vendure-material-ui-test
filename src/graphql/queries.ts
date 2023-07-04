@@ -1,6 +1,6 @@
 import { graphql } from './gql/gql';
 
-const GET_PRODUCTS = graphql(/* GraphQL */ `
+const GET_PRODUCTS = graphql(`
   query GetProducts {
     products {
       items {
@@ -8,7 +8,9 @@ const GET_PRODUCTS = graphql(/* GraphQL */ `
         name
         description
         variants {
+          id
           price
+          name
           currencyCode
         }
         assets {
