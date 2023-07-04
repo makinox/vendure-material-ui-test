@@ -13,6 +13,7 @@ import {
 import { APP_PRICE_VARIANT, DEFAULT_IMAGE } from '@/constants';
 import { GetProductsQuery } from '@/graphql/gql/graphql';
 import { formatPrice } from '@/utils';
+import { CardDescription } from './ProductArticle.styles';
 
 interface ProductArticleProps {
   product: GetProductsQuery['products']['items'][0];
@@ -43,6 +44,9 @@ export function ProductArticle({ product }: ProductArticleProps) {
         />
         <CardContent>
           <Typography variant="h6">{product.name}</Typography>
+          <CardDescription variant="subtitle2">
+            {product.description}
+          </CardDescription>
           <Typography variant="body2" color="text.secondary">
             {price}
           </Typography>

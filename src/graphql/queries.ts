@@ -6,6 +6,7 @@ const GET_PRODUCTS = graphql(/* GraphQL */ `
       items {
         id
         name
+        description
         variants {
           price
           currencyCode
