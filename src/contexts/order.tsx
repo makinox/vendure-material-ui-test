@@ -19,9 +19,10 @@ interface State {
 const OrderContext = createContext<State | undefined>(undefined);
 
 export function OrderProvider({ children }: { children: JSX.Element }) {
-  const { storage: orders, updateStorage } = useStateWithStorage<
-    State['orders']
-  >(ORDER_STORAGE_KEY, []);
+  const { storage: orders, setStorage } = useStateWithStorage<State['orders']>(
+    ORDER_STORAGE_KEY,
+    []
+  );
 
   const ordersSubtotal = useMemo(() => {
     return orders.reduce(
@@ -30,19 +31,21 @@ export function OrderProvider({ children }: { children: JSX.Element }) {
     );
   }, [orders]);
 
-  function saveOrder(order: AppOrder) {
-    const copiedOrders = deepCopy(orders);
-    copiedOrders.push(order);
-
-    updateStorage(copiedOrders);
-  }
+  const saveOrder = (order: AppOrder) => {
+    setStorage((prevStorage) => {
+      const copiedOrders = deepCopy(prevStorage);
+      copiedOrders.push(order);
+      return copiedOrders;
+    });
+  };
 
   function removeOrder(orderId: string) {
-    const copiedOrders = deepCopy(orders);
-    const orderIndex = orders.findIndex((element) => element.id === orderId);
-    copiedOrders.splice(orderIndex, 1);
-
-    updateStorage(copiedOrders);
+    setStorage((prevStorage) => {
+      const copiedOrders = deepCopy(prevStorage);
+      const orderIndex = orders.findIndex((element) => element.id === orderId);
+      copiedOrders.splice(orderIndex, 1);
+      return copiedOrders;
+    });
   }
 
   return (

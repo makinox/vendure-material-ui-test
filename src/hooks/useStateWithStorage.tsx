@@ -1,5 +1,5 @@
 import { serializeValue, unSerializeValue } from '@/utils';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function useStateWithStorage<T>(key: string, defaultValue: T) {
   const initialValue =
@@ -7,16 +7,10 @@ export default function useStateWithStorage<T>(key: string, defaultValue: T) {
 
   const [storage, setStorage] = useState<T>(initialValue);
 
-  function updateStorage(value: T) {
-    setStorage(value);
-    localStorage.setItem(key, serializeValue(value));
-  }
+  // Sync local storage
+  useEffect(() => {
+    localStorage.setItem(key, serializeValue(storage));
+  }, [key, storage]);
 
-  function resetStorage(value: T) {
-    const resetValue = value;
-    setStorage(value);
-    localStorage.setItem(key, serializeValue(resetValue));
-  }
-
-  return { storage, updateStorage, resetStorage };
+  return { storage, setStorage };
 }
