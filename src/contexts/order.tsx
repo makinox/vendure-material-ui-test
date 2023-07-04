@@ -1,22 +1,54 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useMemo } from 'react';
 
-type State = {
-  orders: any;
-  saveOrder: () => void;
-  removeOrder: () => void;
+import useStateWithStorage from '@/hooks/useStateWithStorage';
+import { ORDER_STORAGE_KEY } from '@/constants';
+import { deepCopy } from '@/utils';
+
+type AppOrder = {
+  id: string;
+  subTotal: number;
 };
+
+interface State {
+  orders: Array<AppOrder>;
+  ordersSubtotal: number;
+  saveOrder: (order: AppOrder) => void;
+  removeOrder: (orderId: string) => void;
+}
 
 const OrderContext = createContext<State | undefined>(undefined);
 
 export function OrderProvider({ children }: { children: JSX.Element }) {
-  const [orders, setOrder] = useState([]);
+  const { storage: orders, updateStorage } = useStateWithStorage<
+    State['orders']
+  >(ORDER_STORAGE_KEY, []);
 
-  const saveOrder = () => {};
+  const ordersSubtotal = useMemo(() => {
+    return orders.reduce(
+      (accumulator, currentObject) => accumulator + currentObject.subTotal,
+      0
+    );
+  }, [orders]);
 
-  const removeOrder = () => setOrder([]);
+  function saveOrder(order: AppOrder) {
+    const copiedOrders = deepCopy(orders);
+    copiedOrders.push(order);
+
+    updateStorage(copiedOrders);
+  }
+
+  function removeOrder(orderId: string) {
+    const copiedOrders = deepCopy(orders);
+    const orderIndex = orders.findIndex((element) => element.id === orderId);
+    copiedOrders.splice(orderIndex, 1);
+
+    updateStorage(copiedOrders);
+  }
 
   return (
-    <OrderContext.Provider value={{ orders, saveOrder, removeOrder }}>
+    <OrderContext.Provider
+      value={{ orders, ordersSubtotal, saveOrder, removeOrder }}
+    >
       {children}
     </OrderContext.Provider>
   );
