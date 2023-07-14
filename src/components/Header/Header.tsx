@@ -14,10 +14,7 @@ export function Header() {
       alignItems="center"
       direction="row"
     >
-      <img
-        src="https://santex.wpengine.com/wp-content/uploads/2019/02/logo-santex@3x.png"
-        alt="Santex logo"
-      />
+      <Chip label="Shoping" variant="filled" color="error" />
       <Chip
         label={formatPrice(ordersSubtotal)}
         variant="outlined"
